@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:aop="http://www.springframework.org/schema/aop"
+		xmlns:tx="http://www.springframework.org/schema/tx"
+		xmlns:context="http://www.springframework.org/schema/context"
+		xmlns:mvc="http://www.springframework.org/schema/mvc"
+		xsi:schemaLocation="
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+			http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+			http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+			http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd">
+
+<!-- c3p0连接池 -->
+
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"	destroy-method="close">
+		<property name="driverClass" value="com.mysql.jdbc.Driver" />
+		<property name="jdbcUrl" value="jdbc:mysql://127.0.0.1:3306/c3p0?useUnicode=true&amp;characterEncoding=UTF-8" />
+		<property name="user" value="c3p0" />
+		<property name="password" value="c3p0" />
+		
+		<!--连接池中保留的最小连接数。Default: 3 -->
+		<property name="minPoolSize" value="3" />
+		
+		<!--初始化时获取三个连接，取值应在minPoolSize与maxPoolSize之间。Default: 3 -->
+		<property name="initialPoolSize" value="3" />
+		
+		<!--连接池中保留的最大连接数。Default: 15 -->
+		<property name="maxPoolSize" value="15" />
+		
+		<!--当连接池中的连接耗尽的时候c3p0一次同时获取的连接数。Default: 3 -->
+		<property name="acquireIncrement" value="3" />
+		
+		<!--最大空闲时间,60秒内未使用则连接被丢弃。若为0则永不丢弃。Default: 0 -->
+		<property name="maxIdleTime" value="60" />
+		
+		<!--两次连接中间隔时间，单位毫秒。Default: 1000 -->
+		<property name="acquireRetryDelay" value="1000" />
+		
+		<!--定义在从数据库获取新连接失败后重复尝试的次数。Default: 30 -->
+		<property name="acquireRetryAttempts" value="30" />
+		
+		<!--连接关闭时默认将所有未提交的操作提交。Default: false -->
+		<property name="autoCommitOnClose" value="false" />
+		
+		<!--当连接池用完时客户端调用getConnection()后等待获取新连接的时间，
+		超时后将抛出SQLException。Default: 0(毫秒) 无限期等待 -->
+		<property name="checkoutTimeout" value="0" />
+
+		<!--如果设为true那么在取得连接的同时将校验连接的有效性。Default: false -->
+		<property name="testConnectionOnCheckin" value="true" />
+		
+		<!--c3p0是异步操作的，缓慢的JDBC操作通过帮助进程完成。扩展这些操作可以有效的提升性能
+		通过多线程实现多个操作同时被执行。Default: 3-->
+		<property name="numHelperThreads" value="3" />
+		
+		<!-- 官网 http://www.mchange.com/projects/c3p0/index.html
+		<property name="maxIdleTimeExcessConnections" value="0" />
+		<property name="breakAfterAcquireFailure" value="false" />
+		<property name="debugUnreturnedConnectionStackTraces" value="false" />
+		<property name="idleConnectionTestPeriod" value="60" />
+		<property name="maxAdministrativeTaskTime" value="0" />
+		<property name="maxConnectionAge" value="0" />
+		<property name="maxStatements" value="0" />
+		<property name="maxStatementsPerConnection" value="0" />
+		<property name="propertyCycle" value="0" />
+		<property name="testConnectionOnCheckout" value="false" />
+		<property name="unreturnedConnectionTimeout" value="0" />
+		<property name="connectionTesterClassName" value="com.mchange.v2.c3p0.impl.DefaultConnectionTester" />
+		<property name="automaticTestTable" value="Test" />
+		<property name="preferredTestQuery" value="select id from Test where id=1" />
+		<property name="dataSourceName" value="" />
+		<property name="overrideDefaultUser" value="root" />
+		<property name="overrideDefaultPassword" value="null" />
+		<property name="forceIgnoreUnresolvedTransactions" value="false" />
+		<property name="statementCacheNumDeferredCloseThreads" value="0" />
+		<property name="connectionCustomizerClassName" value="null" />
+		<property name="factoryClassLocation" value="null" />
+		-->
+	</bean>
+		
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<context:component-scan base-package="biz.ezcom.spring.datasource.dao.impl" />	
+</beans>
